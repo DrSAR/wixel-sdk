@@ -19,15 +19,12 @@ apps/wireless_adc_rx/wireless_adc_rx.c.
 #include <usb_com.h>
 #include <radio_queue.h>
 #include <sleep.h>
-#define SLEEP_TIME 5 // seconds
 
 
 /** Parameters ****************************************************************/
 
+int32 CODE param_SLEEP_TIME = 5; // seconds
 int32 CODE param_input_mode = 0;
-
-int32 CODE param_report_period_ms = 20;
-
 
 /** Functions *****************************************************************/
 void analogInputsInit()
@@ -67,11 +64,11 @@ void adcToRadioService()
 
     uint8 XDATA * txPacket;
 
-    // Check to see if it is time to send a report and
+    // Check to see 
     // if there is a radio TX buffer available.
-    if ((uint16)(getMs() - lastTx) >= param_report_period_ms && (txPacket = radioQueueTxCurrentPacket()))
+    if (txPacket = radioQueueTxCurrentPacket())
     {
-        // Both of those conditions are true, so send a report.
+        // Send a report.
 
         uint8 i;
         uint16 XDATA * ptr = (uint16 XDATA *)&txPacket[5];
@@ -114,7 +111,7 @@ void main(void)
         usbComService();
         adcToRadioService();
         radioMacSleep();
-        sleepMode2(SLEEP_TIME);
+        sleepMode2(param_SLEEP_TIME);
         radioMacResume();
     }
 }

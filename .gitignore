@@ -23,6 +23,8 @@ apps/*/*
 *.rst
 *.sym
 *.wxl
+*.lk
+*.omf
 
 # Ignore eclipse files
 .cproject
